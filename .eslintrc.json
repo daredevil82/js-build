@@ -1,0 +1,37 @@
+{
+    "fix": true,
+    "env": {
+        "browser": true,
+        "es6": false
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "eqeqeq" : [
+            "error",
+            "smart"
+        ],
+        "linebreak-style": [
+            "warn",
+            "unix"
+        ],
+        "quotes": [
+            "warn",
+            "single"
+        ],
+        "semi": [
+            "warn",
+            "always"
+        ],
+        "no-undef": 2,
+        "arrow-parens" : 1,
+        "camelcase": [
+            "error",
+            {
+                "properties" : "always"
+            }
+        ]
+    },
+    "globals": {
+        "angular" : true
+    }
+}
