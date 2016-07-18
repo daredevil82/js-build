@@ -1,4 +1,4 @@
-@import "../phone";
+@import '../phone/phone.scss'; //weird, needed the `/phone.scss` bit to have the relative import succeed.
 
 body{
   padding: 20px;

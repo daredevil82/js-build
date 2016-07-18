@@ -1,5 +1,4 @@
 {
-    "fix": true,
     "env": {
         "browser": true,
         "es6": false
@@ -23,6 +22,11 @@
             "always"
         ],
         "no-undef": 2,
+        "no-unused-vars": [
+            "error", {
+                "args": "none"
+            }
+        ],
         "arrow-parens" : 1,
         "camelcase": [
             "error",
@@ -32,6 +36,7 @@
         ]
     },
     "globals": {
-        "angular" : true
+        "angular" : true,
+        "$": true
     }
 }

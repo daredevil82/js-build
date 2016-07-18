@@ -27,6 +27,37 @@ In order to access the source files for third party libraries and plugins, we ha
 that contains the file path in `node_modules` to the full and/or minified version of the required library.  If no minified version exists, it is added to the `extras` 
 array.  These file paths are then concatenated into one array at build time and used for concatenation.  The result of this is the `vendors.js` file in `./build/js` folder.
 
+### Tasks
+Defined Tasks in `gulpfile.js` that are executable via `gulp $NAME` with the exception of the `default` task
+
+* default - Starts the node server and file watchers without any linting.  No build executing.
+* annotation - Executes `gulp-ng-annotate` on application source code so that array-based dependency injection is not needed.
+* app-build - Executes the build process for application source code.  Responsible for concatenating module files into one, minifying, linting and exporting to build folder
+* build - Executes an entire project build starting by cleaning existing build then executing
+
+    * copy font, image and data assets to build folder
+    * `app-build` task
+    * `vendor-build` task
+    * `sass` task to compile all SCSS files
+    * `postcss` task to apply PostCSS plugins to compiled CSS file
+    * linters `sass-lint` and `js-lint` for SCSS & JS files, respectively
+    
+* clean - delete `./build` folder
+* copy - copy data, font and images to './build/assets'
+* help - display task names and short description
+* jslint - Apply [`eslint`](http://eslint.org/) rules to compiled application code.
+* postcss - Apply selected [`PostCSS`](http://postcss.org/) plugins to compiled CSS styles
+* sass - Compile SASS/SCSS files to CSS
+* sass-lint - Apply [`scss-lint`](https://github.com/brigade/scss-lint) rules to SASS/SCSS files
+* server - Start node server running on `http://localhost:8888` without linters
+* server-linter - Same as `server`, but includes `jslint` and `sass-lint` with file watchers.  This can be resource-intensive, so use sparingly.
+* vendor-build - Concatenates and minifies the third-party files in `./libs.json` to one vendor file and generates sourcemap.
+* watch - Set file watchers to trigger re-compilation of SCSS/JS/HTML files in project.  No linters activated.
+* watch-linter - Same as `watch`, but includes `jslint` and `sass-lint` with file watchers.  Same with `server-linter`, the number of file watchers activated can be resource intensive, so use sparingly.
+
+ 
+
+
 ### Advantages
 
 * No modular syntax or import statements required to get third party library code available in your project.

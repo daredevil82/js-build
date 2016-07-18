@@ -14,5 +14,8 @@ angular.module('phonecatApp', [
     $logProvider.debugEnabled(true);
 })
 .run(function($rootScope, $state, $log) {
-    $rootScope.$on('$stateChangeError', console.log.bind(console));
+    $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams) {
+        $log.debug('$stateChangeError');
+        $log.debug(arguments);
+    });
 });
