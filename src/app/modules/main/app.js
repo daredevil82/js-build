@@ -8,14 +8,12 @@ angular.module('phonecatApp', [
     'routing',
     'templates',
     'ngAnimate',
+    'common',
     'phone'
 ])
 .config(function ($logProvider) {
     $logProvider.debugEnabled(true);
 })
-.run(function($rootScope, $state, $log) {
-    $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams) {
-        $log.debug('$stateChangeError');
-        $log.debug(arguments);
-    });
+.run(function($rootScope,$log) {
+
 });

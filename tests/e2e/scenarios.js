@@ -6,7 +6,7 @@
 
 
 describe('PhoneCat Application', function () {
-    describe('phoneList', function () {
+    describe('Phone View', function () {
         beforeEach(function () {
             browser.get('index.html');
         });
@@ -14,15 +14,13 @@ describe('PhoneCat Application', function () {
         it('should filter phone list as user types into search box', function () {
             var phoneList = element.all(by.repeater('phone in $ctrl.phones')),
                 query = element(by.model('$ctrl.query'));
-            
-            expect(phoneList.count()).toBe(3);
-            
+
             query.sendKeys('nexus');
             expect(phoneList.count()).toBe(1);
             
             query.clear()
             query.sendKeys('motorola');
-            expect(phoneList.count()).toBe(2);
+            expect(phoneList.count()).toBe(8);
             
         });
 
@@ -38,7 +36,7 @@ describe('PhoneCat Application', function () {
                 });
             }
 
-            queryField.sendKeys('tablet');
+            queryField.sendKeys('xoom');
 
             expect(getNames()).toEqual([
                 'Motorola XOOM\u2122 with Wi-Fi',
@@ -51,8 +49,33 @@ describe('PhoneCat Application', function () {
                 'MOTOROLA XOOM\u2122',
                 'Motorola XOOM\u2122 with Wi-Fi'
             ]);
-
-
         });
+
+        it('should render phone-specific links', function () {
+            var query = element(by.model('$ctrl.query'));
+            query.sendKeys('nexus');
+
+            element
+                .all(by.css('.phones li a'))
+                .first()
+                .click();
+
+            expect(browser.getLocationAbsUrl()).toBe('/phones/nexus-s');
+        });
+
+        it('should redirect to #/phones', function() {
+            browser.get('index.html');
+            expect(browser.getLocationAbsUrl()).toBe('/phones');
+        });
+    });
+
+    describe('Phone Detail View', function () {
+        beforeEach(function() {
+            browser.get('/#/phones/nexus-s');
+        });
+
+        it('should display a placeholder with phoneId', function () {
+            expect(element(by.binding('$ctrl.phoneId')).getText()).toBe('nexus-s');
+        })
     });
 });

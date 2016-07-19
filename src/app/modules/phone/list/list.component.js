@@ -6,8 +6,8 @@
 
 angular.module('phoneList')
     .component('phoneList', {
-        templateUrl: 'phone/list/list.tpl.html',
-        controller : function PhoneListController ($http) {
+        templateUrl: 'modules/phone/list/list.tpl.html',
+        controller : function PhoneListController ($http, $log, PhoneService) {
             // this.phones = [
             //     {
             //         name: 'Nexus S',
@@ -27,11 +27,15 @@ angular.module('phoneList')
             // ];
             
             var self = this;
+            self.phones = PhoneService.query();
             self.orderProp = 'age';
+            
+            $log.info('Initialized phone list controller')
 
-            $http.get('build/assets/data/phones.json')
-                .then(function(response) {
-                    self.phones = response.data;
-                });
+            // $http.get('build/assets/data/phones.json')
+            //     .then(function(response) {
+            //         //$log.debug(response);
+            //         self.phones = response.data;
+            //     });
         }
     });

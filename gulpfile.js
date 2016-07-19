@@ -52,14 +52,18 @@ const   gulp            = require('gulp-help')(require('gulp')),  //displays tas
         sourcemaps      = require('gulp-sourcemaps'), //Build sourcemaps of JS concatenation
         templates       = require('gulp-angular-templatecache'), // Compile Angular HTML templates to $TEMPLATECACHE
         uglify          = require('gulp-uglify'), // Minifies JS code
-        util            = require('gulp-util');  // Useful Gulp utilities that aren't part of main project.
-        //watch           = require('gulp-watch');
+        util            = require('gulp-util'),  // Useful Gulp utilities that aren't part of main project.
+        watch           = require('gulp-watch');
 
 const   fs              = require('fs');
 
 // Handle template processing into Angular's TemplateCache module
 function processTemplates() {
-    return gulp.src('./src/app/modules/**/*.html')
+    return gulp.src('./src/app/**/*.html')
+        .pipe(debug({
+            title: 'Processing Templates',
+            minimal: false
+        }))
         .pipe(templates())
 }
 
@@ -83,17 +87,17 @@ gulp.task('app-build', 'Concatenate, minify and process the project\'s source co
         .pipe(plumber())
         .pipe(sourcemaps.init())  //Initialize sourcemaps
         .pipe(concat('app.js'))  //Concatenate all angular files to one file
+        .pipe(annotate()) // annotate for dependency injection
         .pipe(addStream.obj(processTemplates())) //Need this to add angular views to TemplateCache
         .pipe(concat('app.js')) //Ensures templateCache is included in concat file
-        .pipe(annotate()) // annotate for dependency injection
         .pipe(sourcemaps.write('.')) //write sourcemap
-        .pipe(gulp.dest(paths.build.js)) //write un-minified file
-        .pipe(rename('app.min.js'))  // rename file to min.js for minfication.  Don't want to overwrite original
-        .pipe(uglify()) //Minify code
-        .on('error', function(err) {
-            logger(err);
-        })
-        .pipe(gulp.dest(paths.build.js)); //write minified file
+        .pipe(gulp.dest(paths.build.js)); //write un-minified file
+        //.pipe(rename('app.min.js'))  // rename file to min.js for minfication.  Don't want to overwrite original
+        //.pipe(uglify()) //Minify code
+        // .on('error', function(err) {
+        //     logger(err);
+        // })
+        // .pipe(gulp.dest(paths.build.js)); //write minified file
 });
 
 // Annotate all angular files to fit array dependency injection syntax
@@ -103,6 +107,7 @@ gulp.task('annotate', 'Annotates all angular source files with injection depende
             title: 'Annotation',
             minimal: false
         }))
+        .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(annotate())
         .pipe(sourcemaps.write('.'))
@@ -222,24 +227,30 @@ gulp.task('vendor-build', 'Concatenates and minifies all third party vendor libr
         .pipe(gulp.dest(paths.build.js));
 });
 
-gulp.task('watch', 'Sets file watchers for project source files for re-compliation', () => {
+gulp.task('watch', 'Sets file watchers for project source files for re-compilation', () => {
+    gulp.watch('./libs.json', ['vendor-build']);
     gulp.watch(['./src/**/*.scss'], ['sass', 'postcss']);
-    gulp.watch(['./src/**/*.js', './src/modules/**/*.html'], ['app-build']);
+    gulp.watch(['./src/**/*.js', './src/app/modules/**/*.html'], ['app-build']);
 });
 
 gulp.task('watch-linter', 'Sets file watchers for project source files to re-compile.  Includes linter functionality', () => {
     gulp.watch(['./src/**/*.scss'], ['sass', 'postcss', 'sass-lint']);
-    gulp.watch(['./src/**/*.js', './src/modules/**/*.html'], ['app-build', 'js-lint']);
-})
+    gulp.watch(['./src/**/*.js', './src/app/modules/**/*.html'], ['app-build', 'js-lint']);
+});
 
 gulp.task('default', 'Start node server and file watchers without linters', ['server']);
 
-gulp.task('server', 'Starts node server running on port [' + serverConfig.port + ']', ['watch'], () => {
+gulp.task('server', 'Starts node server running on port [' + serverConfig.port + ']', () => {
     const server = liveServer.static(serverConfig.path, serverConfig.port);
     server.start();
+
+    gulp.start('watch');
 });
 
-gulp.task('server-linter', 'Starts node server running on port [' + serverConfig.port + '] and runs linters', ['server', 'watch-linter']);
+gulp.task('server-linter', 'Starts node server running on port [' + serverConfig.port + '] and runs linters', ['server'], () => {
+    gulp.watch(['./src/**/*.scss'], ['sass', 'postcss', 'sass-lint']);
+    gulp.watch(['./src/**/*.js', './src/app/modules/**/*.html'], ['app-build', 'jslint']);
+});
 
 gulp.task('build', 'Clean and build all source code and styles and execute linters', () => {
     runsequence('clean', 'copy', 'vendor-build', 'app-build',
