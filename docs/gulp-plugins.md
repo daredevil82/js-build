@@ -35,3 +35,6 @@ it can be written like
 * [`gulp-uglify`](https://www.npmjs.com/package/gulp-uglify) minfies JS files with [UglifyJS](https://www.npmjs.com/package/uglifyjs)
 * [`gulp-util`](https://www.npmjs.com/package/gulp-util) contains some utility functions for plugins.
 
+[Home](../README.md)
+[Previous](gulp.md)
+[Next](gulp-tasks.md)

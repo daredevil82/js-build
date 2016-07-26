@@ -9,6 +9,13 @@ Prior to starting this demonstration, ensure `gulp babel` have been installed vi
 
 For more details opf the build, type `gulp help` in the command line, and view the gulpfile at `./gulpfile.js`
 
+A brief description of node, gulp and the plugins used are included in the `docs` folder.
+
+* [Node Basics](docs/node.md)
+* [Gulp Introduction](docs/gulp.md)
+    * [Plugins](docs/gulp-plugins.md)
+    * [Tasks](docs/gulp-tasks.md)
+
 ## Build Description
 
 There are so many ways to implement a JS build system, with `webpack`, `browserify`, `commonJS`, `requireJS`, etc.  This is an attempt at a simple task runner that

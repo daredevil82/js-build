@@ -15,3 +15,6 @@
 * help
 * watch
 * copy-data, copy-fonts, copy-images
+
+[Home](../README.md)
+[Previous](gulp-plugins.md)

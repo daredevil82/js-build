@@ -82,5 +82,6 @@ gulp.task('watch', 'Sets file watchers for project source files for re-compilati
  
 Allows you to chain plugins by directing the stream from an output to an input for further data modification
  
- 
- 
+ [Home](../README.md)
+ [Previous](node.md)
+ [Next](gulp-plugins.md)

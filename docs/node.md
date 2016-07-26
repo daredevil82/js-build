@@ -24,4 +24,7 @@ There are four fundamental streams in Node:
 **Piping**
 
 Allows you to attach a Writeable Stream to a Readable stream, causing it to switch automatically to flowing mode and push all the data from the Readable to Writeable.  
-The data flow will be automatically managed so that the destination Writeable stream is not clogged by the faster Readable. 
+The data flow will be automatically managed so that the destination Writeable stream is not clogged by the faster Readable.
+ 
+[Home](../README.md)
+[Next](gulp.md)
